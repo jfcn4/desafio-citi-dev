@@ -10,6 +10,8 @@
     "migration:deploy": "prisma migrate deploy",
     "studio": "cross-env DATABASE_HOST=localhost prisma studio",
     "typecheck": "tsc --noEmit",
+    "test": "cross-env DATABASE_HOST=localhost DATABASE_DB=treinamento-crud-test vitest run",
+    "seed": "cross-env DATABASE_HOST=localhost tsx prisma/seed.ts",
     "build": "swc src --strip-leading-paths --out-dir dist",
     "start": "node dist/server.js",
     "prod": "yarn migration:deploy && yarn build && yarn start"
@@ -26,11 +28,15 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/express": "^4.17.21",
     "@types/node": "^20.17.6",
+    "@types/supertest": "^6.0.3",
     "concurrently": "^9.1.0",
     "cross-env": "^7.0.3",
     "prisma": "5.22.0",
+    "supertest": "^7.3.1",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.6.3"
+    "tsx": "^4.23.15",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.9"
   }
 }
