@@ -346,7 +346,8 @@ Em http://localhost:3001/loja há um painel da loja feito com HTML, CSS e JavaSc
 | `Environment variable not found: DATABASE_URL` | Falta o `.env` na raiz do projeto: `cp .env.example .env`. |
 | `failed to connect to the docker API` | O Docker está fechado. Abra e espere ele ficar pronto. |
 | `port is already allocated` | Troque `SERVER_PORT` ou `DATABASE_PORT` no `.env` e suba de novo. |
-| `Can't reach database server` | Os containers não estão de pé: `docker compose up -d`. |
+| `Can't reach database server` | Os containers não estão de pé (`docker compose up -d`) ou o banco ainda está iniciando: espere uns 10 segundos e rode o comando de novo. |
+| `P1000: Authentication failed` ou `address already in use` na porta 5432 | Um Postgres instalado na máquina está usando a 5432. Troque `DATABASE_PORT=5433` no `.env`, rode `docker compose down` e `docker compose up -d`, e repita o `yarn migration`. |
 | `Property 'planta' does not exist on type 'PrismaClient'` | Rode `yarn migration` e, no VS Code, **Ctrl+Shift+P → Restart TS Server**. |
 | A API não responde em `localhost:3001` | Veja o erro em `docker compose logs -f server`. |
 | `500` ao criar ou editar depois de mudar o `schema.prisma` | O banco ainda está com as colunas antigas: rode `yarn migration`. |
