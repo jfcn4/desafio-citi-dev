@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Folhagem & Cia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --papel: #f6f1e7;
+      --papel-escuro: #ece4d3;
+      --cartao: #fffdf8;
+      --musgo: #2f4a34;
+      --musgo-claro: #4f6f50;
+      --oliva: #8a9a5b;
+      --terracota: #c0603a;
+      --terracota-escura: #a24e2d;
+      --tinta: #1f2a21;
+      --tinta-suave: #5b6659;
+      --linha: #ddd3bf;
+      --erro: #a8322a;
+      --sucesso: #2f6b3b;
+      --sombra: 0 1px 2px rgba(31, 42, 33, 0.06), 0 6px 18px rgba(31, 42, 33, 0.07);
+      --raio: 14px;
+      --serifa: "Fraunces", Georgia, serif;
+      --sans: "DM Sans", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--papel);
+      color: var(--tinta);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    button, input, select { font: inherit; color: inherit; }
+
+    :focus-visible {
+      outline: 3px solid var(--oliva);
+      outline-offset: 2px;
+    }
+
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+
+    header.topo {
+      border-bottom: 1px solid var(--linha);
+      padding: 36px 0 28px;
+    }
+
+    .topo-grade {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .marca small {
+      display: block;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--musgo-claro);
+      font-weight: 600;
+    }
+
+    .marca h1 {
+      font-family: var(--serifa);
+      font-weight: 600;
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1.05;
+      margin: 6px 0 0;
+      color: var(--musgo);
+    }
+
+    .marca h1 em { font-weight: 400; color: var(--terracota); }
+
+    .metricas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .metrica {
+      background: var(--musgo);
+      color: var(--papel);
+      border-radius: var(--raio);
+      padding: 14px 20px;
+      min-width: 170px;
+    }
+
+    .metrica span { display: block; font-size: 12px; opacity: 0.8; letter-spacing: 0.04em; }
+    .metrica strong {
+      font-family: var(--serifa);
+      font-size: 26px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .barra {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .campo-busca { flex: 1 1 220px; position: relative; }
+
+    .campo-busca input { width: 100%; padding-left: 38px; }
+
+    .campo-busca svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--tinta-suave);
+    }
+
+    input, select {
+      background: var(--cartao);
+      border: 1px solid var(--linha);
+      border-radius: 10px;
+      padding: 10px 12px;
+      min-height: 42px;
+    }
+
+    .alternar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      min-height: 42px;
+      border: 1px solid var(--linha);
+      border-radius: 10px;
+      background: var(--cartao);
+      cursor: pointer;
+    }
+
+    .alternar[aria-pressed="true"] {
+      background: var(--papel-escuro);
+      border-color: var(--musgo-claro);
+      color: var(--musgo);
+      font-weight: 600;
+    }
+
+    .botao {
+      border: none;
+      border-radius: 10px;
+      padding: 0 18px;
+      min-height: 42px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .botao:active { transform: translateY(1px); }
+    .botao:disabled { opacity: 0.5; cursor: not-allowed; }
+    .botao-primario { background: var(--musgo); color: var(--papel); }
+    .botao-primario:hover { background: var(--musgo-claro); }
+    .botao-venda { background: var(--terracota); color: #fff; }
+    .botao-venda:hover { background: var(--terracota-escura); }
+    .botao-fantasma { background: transparent; color: var(--tinta-suave); border: 1px solid var(--linha); }
+    .botao-fantasma:hover { background: var(--papel-escuro); }
+    .botao-perigo { background: var(--erro); color: #fff; }
+
+    .botao-icone {
+      background: transparent;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: inline-grid;
+      place-items: center;
+      cursor: pointer;
+      color: var(--tinta-suave);
+    }
+
+    .botao-icone:hover { background: var(--papel-escuro); color: var(--tinta); }
+    .botao-icone svg { width: 18px; height: 18px; }
+
+    main { padding-bottom: 60px; }
+
+    .grade {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 18px;
+    }
+
+    .cartao {
+      background: var(--cartao);
+      border: 1px solid var(--linha);
+      border-radius: var(--raio);
+      box-shadow: var(--sombra);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .cartao:hover { transform: translateY(-2px); box-shadow: 0 2px 4px rgba(31,42,33,.06), 0 12px 28px rgba(31,42,33,.1); }
+
+    .cartao.esgotada { opacity: 0.68; }
+
+    .cartao.pulsar { animation: pulsar 0.6s ease; }
+
+    @keyframes pulsar {
+      0% { box-shadow: 0 0 0 0 rgba(192, 96, 58, 0.5); }
+      100% { box-shadow: 0 0 0 14px rgba(192, 96, 58, 0); }
+    }
+
+    .cartao-topo { display: flex; justify-content: space-between; gap: 10px; }
+
+    .cartao h2 {
+      font-family: var(--serifa);
+      font-size: 22px;
+      font-weight: 600;
+      margin: 0;
+      line-height: 1.15;
+      color: var(--musgo);
+    }
+
+    .especie { font-family: var(--serifa); font-style: italic; color: var(--tinta-suave); margin: 2px 0 0; }
+
+    .acoes-cartao { display: flex; gap: 2px; flex-shrink: 0; }
+
+    .selos { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .selo {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12.5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--papel);
+      border: 1px solid var(--linha);
+      color: var(--tinta);
+    }
+
+    .selo svg { width: 14px; height: 14px; }
+    .selo-pet { background: #e6eedb; border-color: #c5d3ad; color: var(--musgo); }
+    .selo-esgotada { background: #f3ddd3; border-color: #e3b8a6; color: var(--terracota-escura); font-weight: 600; }
+
+    .preco-linha { display: flex; justify-content: space-between; align-items: baseline; }
+
+    .preco {
+      font-family: var(--serifa);
+      font-size: 24px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .estoque { font-size: 13px; color: var(--tinta-suave); }
+
+    .venda {
+      display: flex;
+      gap: 8px;
+      border-top: 1px dashed var(--linha);
+      padding-top: 14px;
+    }
+
+    .venda input { width: 76px; text-align: center; }
+    .venda .botao { flex: 1; }
+
+    .estado {
+      text-align: center;
+      padding: 70px 20px;
+      color: var(--tinta-suave);
+      font-family: var(--serifa);
+      font-size: 20px;
+    }
+
+    .estado small { display: block; font-family: var(--sans); font-size: 14px; margin-top: 6px; }
+
+    .esqueleto {
+      height: 230px;
+      border-radius: var(--raio);
+      background: linear-gradient(90deg, var(--papel-escuro), var(--cartao), var(--papel-escuro));
+      background-size: 200% 100%;
+      animation: brilho 1.3s infinite linear;
+    }
+
+    @keyframes brilho { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+    dialog {
+      border: none;
+      border-radius: 18px;
+      padding: 0;
+      background: var(--cartao);
+      color: var(--tinta);
+      width: min(520px, calc(100vw - 32px));
+      box-shadow: 0 20px 60px rgba(31, 42, 33, 0.3);
+    }
+
+    dialog::backdrop { background: rgba(31, 42, 33, 0.45); }
+
+    .dialogo-corpo { padding: 26px; }
+
+    .dialogo-corpo h3 {
+      font-family: var(--serifa);
+      font-size: 26px;
+      font-weight: 600;
+      margin: 0 0 18px;
+      color: var(--musgo);
+    }
+
+    .formulario { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .formulario .inteiro { grid-column: 1 / -1; }
+
+    .formulario label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: var(--tinta-suave); }
+
+    .checagem { flex-direction: row !important; align-items: center; gap: 10px !important; font-size: 15px !important; color: var(--tinta) !important; }
+    .checagem input { width: 20px; min-height: 20px; height: 20px; accent-color: var(--musgo); }
+
+    .erro-form { color: var(--erro); font-size: 14px; min-height: 20px; margin: 12px 0 0; }
+
+    .dialogo-acoes { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+
+    .toasts {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 10;
+      max-width: calc(100vw - 32px);
+    }
+
+    .toast {
+      background: var(--tinta);
+      color: var(--papel);
+      padding: 12px 16px;
+      border-radius: 12px;
+      box-shadow: var(--sombra);
+      border-left: 5px solid var(--oliva);
+      animation: entrar 0.25s ease;
+      max-width: 380px;
+    }
+
+    .toast.erro { border-left-color: var(--terracota); }
+
+    @keyframes entrar { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+    @media (max-width: 600px) {
+      .formulario { grid-template-columns: 1fr; }
+      .metrica { flex: 1; min-width: 0; }
+      .barra > select, .barra > .alternar, .barra > .botao { flex: 1 1 calc(50% - 5px); }
+      .grade { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-meia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3a9 9 0 1 0 0 18z" fill="currentColor"/><circle cx="12" cy="12" r="9"/></symbol>
+    <symbol id="i-sombra" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+    <symbol id="i-gota" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></symbol>
+    <symbol id="i-pata" viewBox="0 0 24 24" fill="currentColor"><ellipse cx="7" cy="9" rx="2" ry="2.6"/><ellipse cx="17" cy="9" rx="2" ry="2.6"/><ellipse cx="10.2" cy="5.5" rx="1.9" ry="2.4"/><ellipse cx="13.8" cy="5.5" rx="1.9" ry="2.4"/><path d="M12 11c-3 0-5.5 3.4-5.5 5.6 0 1.6 1.3 2.4 2.7 2.4 1.2 0 1.8-.6 2.8-.6s1.6.6 2.8.6c1.4 0 2.7-.8 2.7-2.4C17.5 14.4 15 11 12 11z"/></symbol>
+    <symbol id="i-editar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
+    <symbol id="i-lixo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+    <symbol id="i-busca" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+  </svg>
+
+  <header class="topo">
+    <div class="container topo-grade">
+      <div class="marca">
+        <small>Painel da loja</small>
+        <h1>Folhagem <em>&amp;</em> Cia</h1>
+      </div>
+      <div class="metricas" aria-live="polite">
+        <div class="metrica"><span>Valor em estoque</span><strong id="valor-total">—</strong></div>
+        <div class="metrica"><span>Vasos disponíveis</span><strong id="total-vasos">—</strong></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="barra" role="search">
+      <div class="campo-busca">
+        <svg aria-hidden="true"><use href="#i-busca"/></svg>
+        <label for="f-nome" class="sr">Buscar por nome</label>
+        <input id="f-nome" type="search" placeholder="Buscar por nome popular" />
+      </div>
+      <label for="f-luz" class="sr">Luminosidade</label>
+      <select id="f-luz">
+        <option value="">Toda luminosidade</option>
+        <option value="SOMBRA">Sombra</option>
+        <option value="MEIA_SOMBRA">Meia-sombra</option>
+        <option value="SOL_PLENO">Sol pleno</option>
+      </select>
+      <label for="f-pet" class="sr">Pet-friendly</label>
+      <select id="f-pet">
+        <option value="">Pets: todas</option>
+        <option value="true">Seguras para pets</option>
+        <option value="false">Não seguras para pets</option>
+      </select>
+      <label for="f-ordem" class="sr">Ordenar</label>
+      <select id="f-ordem">
+        <option value="">Mais recentes no fim</option>
+        <option value="nome">Ordenar por nome</option>
+        <option value="preco">Ordenar por preço</option>
+      </select>
+      <button id="f-esgotadas" class="alternar" aria-pressed="false" type="button">Só esgotadas</button>
+      <button id="nova" class="botao botao-primario" type="button">+ Nova planta</button>
+    </div>
+
+    <main>
+      <div id="grade" class="grade" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <dialog id="dialogo-planta" aria-labelledby="titulo-form">
+    <form id="form-planta" class="dialogo-corpo" novalidate>
+      <h3 id="titulo-form">Nova planta</h3>
+      <div class="formulario">
+        <label class="inteiro">Nome popular<input name="nome" required /></label>
+        <label class="inteiro">Espécie<input name="especie" required /></label>
+        <label>Preço (R$)<input name="preco" inputmode="decimal" placeholder="89,90" required /></label>
+        <label>Estoque<input name="estoque" type="number" min="0" step="1" required /></label>
+        <label>Luminosidade
+          <select name="luminosidade" required>
+            <option value="SOMBRA">Sombra</option>
+            <option value="MEIA_SOMBRA">Meia-sombra</option>
+            <option value="SOL_PLENO">Sol pleno</option>
+          </select>
+        </label>
+        <label>Regar a cada (dias)<input name="regaACadaDias" type="number" min="1" step="1" required /></label>
+        <label class="inteiro checagem"><input name="petFriendly" type="checkbox" /> Segura para cães e gatos</label>
+      </div>
+      <p class="erro-form" id="erro-form" role="alert"></p>
+      <div class="dialogo-acoes">
+        <button type="button" class="botao botao-fantasma" data-fechar>Cancelar</button>
+        <button type="submit" class="botao botao-primario" id="salvar">Salvar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dialogo-excluir" aria-labelledby="titulo-excluir">
+    <div class="dialogo-corpo">
+      <h3 id="titulo-excluir">Excluir planta?</h3>
+      <p id="texto-excluir"></p>
+      <div class="dialogo-acoes">
+        <button type="button" class="botao botao-fantasma" data-fechar>Cancelar</button>
+        <button type="button" class="botao botao-perigo" id="confirmar-excluir">Excluir</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toasts" id="toasts" aria-live="assertive"></div>
+
+  <script>
+    const LUZ = {
+      SOMBRA: { rotulo: "Sombra", icone: "i-sombra" },
+      MEIA_SOMBRA: { rotulo: "Meia-sombra", icone: "i-meia" },
+      SOL_PLENO: { rotulo: "Sol pleno", icone: "i-sol" },
+    };
+
+    const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+    const formatarCentavos = (c) => brl.format(c / 100);
+
+    const el = (id) => document.getElementById(id);
+    const grade = el("grade");
+    const filtros = { nome: el("f-nome"), luminosidade: el("f-luz"), petFriendly: el("f-pet"), ordem: el("f-ordem") };
+    const botaoEsgotadas = el("f-esgotadas");
+    const dialogoPlanta = el("dialogo-planta");
+    const formPlanta = el("form-planta");
+    const dialogoExcluir = el("dialogo-excluir");
+
+    let plantaEmEdicao = null;
+    let plantaParaExcluir = null;
+    let plantas = [];
+
+    function escapar(texto) {
+      const div = document.createElement("div");
+      div.textContent = String(texto);
+      return div.innerHTML;
+    }
+
+    function toast(mensagem, tipo = "ok") {
+      const t = document.createElement("div");
+      t.className = "toast" + (tipo === "erro" ? " erro" : "");
+      t.textContent = mensagem;
+      el("toasts").appendChild(t);
+      setTimeout(() => t.remove(), 4000);
+    }
+
+    async function api(caminho, opcoes = {}) {
+      const res = await fetch(caminho, {
+        ...opcoes,
+        headers: opcoes.body ? { "Content-Type": "application/json" } : undefined,
+      });
+      if (res.status === 204) return null;
+      const dados = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(dados.message || `Erro ${res.status}`);
+      return dados;
+    }
+
+    async function carregarTotais() {
+      try {
+        const t = await api("/plantas/estoque/valor-total");
+        el("valor-total").textContent = formatarCentavos(t.valorTotalEmCentavos);
+        el("total-vasos").textContent = t.totalDeVasos.toLocaleString("pt-BR");
+      } catch (e) {
+        toast(e.message, "erro");
+      }
+    }
+
+    function montarUrl() {
+      if (botaoEsgotadas.getAttribute("aria-pressed") === "true") return "/plantas/esgotadas";
+      const params = new URLSearchParams();
+      for (const [chave, campo] of Object.entries(filtros)) {
+        const valor = campo.value.trim();
+        if (valor) params.set(chave, valor);
+      }
+      const qs = params.toString();
+      return qs ? `/plantas?${qs}` : "/plantas";
+    }
+
+    async function carregarPlantas() {
+      grade.innerHTML = '<div class="esqueleto"></div>'.repeat(3);
+      try {
+        plantas = await api(montarUrl());
+        renderizar();
+      } catch (e) {
+        grade.innerHTML = `<div class="estado">Não foi possível carregar.<small>${escapar(e.message)}</small></div>`;
+      }
+    }
+
+    function cartaoHtml(p) {
+      const luz = LUZ[p.luminosidade];
+      const esgotada = p.estoque === 0;
+      return `
+        <article class="cartao${esgotada ? " esgotada" : ""}" data-id="${p.id}">
+          <div class="cartao-topo">
+            <div>
+              <h2>${escapar(p.nome)}</h2>
+              <p class="especie">${escapar(p.especie)}</p>
+            </div>
+            <div class="acoes-cartao">
+              <button class="botao-icone" data-acao="editar" aria-label="Editar ${escapar(p.nome)}"><svg><use href="#i-editar"/></svg></button>
+              <button class="botao-icone" data-acao="excluir" aria-label="Excluir ${escapar(p.nome)}"><svg><use href="#i-lixo"/></svg></button>
+            </div>
+          </div>
+          <div class="selos">
+            <span class="selo"><svg aria-hidden="true"><use href="#${luz.icone}"/></svg>${luz.rotulo}</span>
+            <span class="selo"><svg aria-hidden="true"><use href="#i-gota"/></svg>a cada ${p.regaACadaDias} ${p.regaACadaDias === 1 ? "dia" : "dias"}</span>
+            ${p.petFriendly ? '<span class="selo selo-pet"><svg aria-hidden="true"><use href="#i-pata"/></svg>Pet-friendly</span>' : ""}
+            ${esgotada ? '<span class="selo selo-esgotada">Esgotada</span>' : ""}
+          </div>
+          <div class="preco-linha">
+            <span class="preco">${formatarCentavos(p.preco)}</span>
+            <span class="estoque">${p.estoque} ${p.estoque === 1 ? "vaso" : "vasos"}</span>
+          </div>
+          <form class="venda" data-acao="vender">
+            <label class="sr" for="qtd-${p.id}">Quantidade a vender</label>
+            <input id="qtd-${p.id}" name="quantidade" type="number" min="1" step="1" value="1" ${esgotada ? "disabled" : ""} />
+            <button class="botao botao-venda" type="submit" ${esgotada ? "disabled" : ""}>Vender</button>
+          </form>
+        </article>`;
+    }
+
+    function renderizar() {
+      if (plantas.length === 0) {
+        grade.innerHTML = '<div class="estado">Nenhuma planta encontrada com esses filtros.<small>Tente afrouxar a busca ou cadastre uma nova.</small></div>';
+        return;
+      }
+      grade.innerHTML = plantas.map(cartaoHtml).join("");
+    }
+
+    function abrirFormulario(planta = null) {
+      plantaEmEdicao = planta;
+      formPlanta.reset();
+      el("erro-form").textContent = "";
+      el("titulo-form").textContent = planta ? "Editar planta" : "Nova planta";
+      if (planta) {
+        const f = formPlanta.elements;
+        f.nome.value = planta.nome;
+        f.especie.value = planta.especie;
+        f.preco.value = (planta.preco / 100).toFixed(2).replace(".", ",");
+        f.estoque.value = planta.estoque;
+        f.luminosidade.value = planta.luminosidade;
+        f.regaACadaDias.value = planta.regaACadaDias;
+        f.petFriendly.checked = planta.petFriendly;
+      }
+      dialogoPlanta.showModal();
+      formPlanta.elements.nome.focus();
+    }
+
+    function reaisParaCentavos(texto) {
+      const limpo = texto.trim().replace(/^R\$\s*/, "");
+      const normalizado = limpo.includes(",")
+        ? limpo.replace(/\./g, "").replace(",", ".")
+        : limpo;
+      if (normalizado === "") return undefined;
+      const valor = Number(normalizado);
+      return Number.isFinite(valor) ? Math.round(valor * 100) : NaN;
+    }
+
+    function inteiroOuTexto(texto) {
+      const t = texto.trim();
+      if (t === "") return undefined;
+      const n = Number(t);
+      return Number.isNaN(n) ? t : n;
+    }
+
+    formPlanta.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+      const f = formPlanta.elements;
+      const dados = {
+        nome: f.nome.value,
+        especie: f.especie.value,
+        preco: reaisParaCentavos(f.preco.value),
+        estoque: inteiroOuTexto(f.estoque.value),
+        luminosidade: f.luminosidade.value,
+        petFriendly: f.petFriendly.checked,
+        regaACadaDias: inteiroOuTexto(f.regaACadaDias.value),
+      };
+      const salvar = el("salvar");
+      salvar.disabled = true;
+      try {
+        if (plantaEmEdicao) {
+          await api(`/plantas/${plantaEmEdicao.id}`, { method: "PATCH", body: JSON.stringify(dados) });
+          toast(`${dados.nome.trim()} atualizada.`);
+        } else {
+          await api("/plantas", { method: "POST", body: JSON.stringify(dados) });
+          toast(`${dados.nome.trim()} cadastrada.`);
+        }
+        dialogoPlanta.close();
+        await Promise.all([carregarPlantas(), carregarTotais()]);
+      } catch (e) {
+        el("erro-form").textContent = e.message;
+      } finally {
+        salvar.disabled = false;
+      }
+    });
+
+    grade.addEventListener("click", (evento) => {
+      const botao = evento.target.closest("button[data-acao]");
+      if (!botao) return;
+      const id = Number(botao.closest(".cartao").dataset.id);
+      const planta = plantas.find((p) => p.id === id);
+      if (!planta) return;
+
+      if (botao.dataset.acao === "editar") abrirFormulario(planta);
+      if (botao.dataset.acao === "excluir") {
+        plantaParaExcluir = planta;
+        el("texto-excluir").textContent = `${planta.nome} (${planta.especie}) será removida do catálogo. Essa ação não pode ser desfeita.`;
+        dialogoExcluir.showModal();
+      }
+    });
+
+    grade.addEventListener("submit", async (evento) => {
+      const form = evento.target.closest("form[data-acao='vender']");
+      if (!form) return;
+      evento.preventDefault();
+      const cartao = form.closest(".cartao");
+      const id = Number(cartao.dataset.id);
+      const quantidade = inteiroOuTexto(form.elements.quantidade.value);
+      try {
+        const atualizada = await api(`/plantas/${id}/venda`, {
+          method: "POST",
+          body: JSON.stringify({ quantidade }),
+        });
+        const indice = plantas.findIndex((p) => p.id === id);
+        plantas[indice] = atualizada;
+        const novo = document.createElement("div");
+        novo.innerHTML = cartaoHtml(atualizada).trim();
+        const novoCartao = novo.firstElementChild;
+        cartao.replaceWith(novoCartao);
+        novoCartao.classList.add("pulsar");
+        toast(`Venda registrada: ${quantidade} × ${atualizada.nome}.`);
+        carregarTotais();
+      } catch (e) {
+        toast(e.message, "erro");
+      }
+    });
+
+    el("confirmar-excluir").addEventListener("click", async () => {
+      if (!plantaParaExcluir) return;
+      try {
+        await api(`/plantas/${plantaParaExcluir.id}`, { method: "DELETE" });
+        toast(`${plantaParaExcluir.nome} excluída.`);
+        dialogoExcluir.close();
+        await Promise.all([carregarPlantas(), carregarTotais()]);
+      } catch (e) {
+        toast(e.message, "erro");
+      }
+    });
+
+    document.querySelectorAll("[data-fechar]").forEach((b) =>
+      b.addEventListener("click", () => b.closest("dialog").close())
+    );
+
+    let espera;
+    filtros.nome.addEventListener("input", () => {
+      clearTimeout(espera);
+      espera = setTimeout(carregarPlantas, 300);
+    });
+    [filtros.luminosidade, filtros.petFriendly, filtros.ordem].forEach((s) =>
+      s.addEventListener("change", carregarPlantas)
+    );
+
+    botaoEsgotadas.addEventListener("click", () => {
+      const ativo = botaoEsgotadas.getAttribute("aria-pressed") === "true";
+      botaoEsgotadas.setAttribute("aria-pressed", String(!ativo));
+      Object.values(filtros).forEach((c) => (c.disabled = !ativo));
+      carregarPlantas();
+    });
+
+    el("nova").addEventListener("click", () => abrirFormulario());
+
+    carregarPlantas();
+    carregarTotais();
+  </script>
+</body>
+</html>
