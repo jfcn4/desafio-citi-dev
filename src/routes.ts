@@ -1,5 +1,6 @@
 import express from "express";
 import * as UserController from "@controllers/UserController";
+import * as PlantaController from "@controllers/PlantaController";
 
 const routes = express.Router();
 
@@ -13,5 +14,16 @@ routes.get("/users", UserController.readAllUsers);
 routes.get("/users/:id", UserController.readUserById);
 routes.patch("/users/:id", UserController.updateUser);
 routes.delete("/users/:id", UserController.deleteUser);
+
+// Plantas: as rotas fixas vêm antes de /plantas/:id, porque o Express usa a
+// primeira rota que combinar e "esgotadas" seria tratado como um id
+routes.post("/plantas", PlantaController.createPlanta);
+routes.get("/plantas", PlantaController.readAllPlantas);
+routes.get("/plantas/esgotadas", PlantaController.readPlantasEsgotadas);
+routes.get("/plantas/estoque/valor-total", PlantaController.readValorTotalEstoque);
+routes.get("/plantas/:id", PlantaController.readPlantaById);
+routes.patch("/plantas/:id", PlantaController.updatePlanta);
+routes.delete("/plantas/:id", PlantaController.deletePlanta);
+routes.post("/plantas/:id/venda", PlantaController.venderPlanta);
 
 export default routes;
