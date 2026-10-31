@@ -1,0 +1,126 @@
+@base = http://localhost:3001
+
+### Cadastrar planta válida (201)
+POST {{base}}/plantas
+Content-Type: application/json
+
+{
+  "nome": "Costela-de-adão",
+  "especie": "Monstera deliciosa",
+  "preco": 8990,
+  "estoque": 12,
+  "luminosidade": "MEIA_SOMBRA",
+  "petFriendly": false,
+  "regaACadaDias": 3
+}
+
+### Cadastrar com estoque 0 e petFriendly false (201)
+POST {{base}}/plantas
+Content-Type: application/json
+
+{
+  "nome": "Calathea",
+  "especie": "Goeppertia orbifolia",
+  "preco": 7990,
+  "estoque": 0,
+  "luminosidade": "SOMBRA",
+  "petFriendly": false,
+  "regaACadaDias": 3
+}
+
+### Cadastrar com preco em texto (400)
+POST {{base}}/plantas
+Content-Type: application/json
+
+{
+  "nome": "Jiboia",
+  "especie": "Epipremnum aureum",
+  "preco": "8990",
+  "estoque": 5,
+  "luminosidade": "SOMBRA",
+  "petFriendly": false,
+  "regaACadaDias": 4
+}
+
+### Cadastrar com luminosidade inválida (400)
+POST {{base}}/plantas
+Content-Type: application/json
+
+{
+  "nome": "Jiboia",
+  "especie": "Epipremnum aureum",
+  "preco": 3490,
+  "estoque": 5,
+  "luminosidade": "LUA",
+  "petFriendly": false,
+  "regaACadaDias": 4
+}
+
+### Listar todas (200)
+GET {{base}}/plantas
+
+### Filtrar por luminosidade e petFriendly (200)
+GET {{base}}/plantas?luminosidade=MEIA_SOMBRA&petFriendly=false
+
+### Filtro inválido (400)
+GET {{base}}/plantas?luminosidade=LUA
+
+### Bônus: busca por nome e ordenação (200)
+GET {{base}}/plantas?nome=costela&ordem=preco
+
+### Buscar por id (200)
+GET {{base}}/plantas/1
+
+### Buscar id inexistente (404)
+GET {{base}}/plantas/9999
+
+### Buscar id inválido (400)
+GET {{base}}/plantas/abc
+
+### Editar só o preço (200)
+PATCH {{base}}/plantas/1
+Content-Type: application/json
+
+{ "preco": 9990 }
+
+### Editar com valor inválido (400)
+PATCH {{base}}/plantas/1
+Content-Type: application/json
+
+{ "estoque": -1 }
+
+### Vender (200)
+POST {{base}}/plantas/1/venda
+Content-Type: application/json
+
+{ "quantidade": 2 }
+
+### Vender mais do que tem (400)
+POST {{base}}/plantas/1/venda
+Content-Type: application/json
+
+{ "quantidade": 999 }
+
+### Vender quantidade 0 (400)
+POST {{base}}/plantas/1/venda
+Content-Type: application/json
+
+{ "quantidade": 0 }
+
+### Valor total do estoque (200)
+GET {{base}}/plantas/estoque/valor-total
+
+### Deletar (204)
+DELETE {{base}}/plantas/1
+
+### Deletar de novo (404)
+DELETE {{base}}/plantas/1
+
+### JSON malformado (400)
+POST {{base}}/plantas
+Content-Type: application/json
+
+{ "nome": "Jiboia", }
+
+### Bônus: plantas esgotadas (200)
+GET {{base}}/plantas/esgotadas
