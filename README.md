@@ -1,5 +1,8 @@
 # 🌿 Folhagem & Cia — API
 
+## Site das entregas:
+https://joaofelipe-citi.com.br/ 
+
 ## Visão geral
 
 A **Folhagem & Cia** vende plantas pela internet e controlava o estoque numa planilha, o que já fez a loja vender uma planta que não existia mais. Esta API substitui a planilha: cadastra, lista, edita e remove plantas, registra vendas sem nunca deixar o estoque negativo e calcula quanto vale o estoque.
@@ -335,6 +338,18 @@ Os testes usam um **banco separado**, `treinamento-crud-test`, recriado do zero 
 ### Painel web
 
 Em http://localhost:3001/loja há um painel da loja feito com HTML, CSS e JavaScript puros, sem build. Ele consome a própria API: lista as plantas com filtros, cadastra, edita, vende, exclui e mostra o valor do estoque. As mensagens de erro exibidas são as que a API retorna.
+
+No topo do painel fica o **jardim do estoque** (`public/jardim.js`). Cada planta desenhada é uma planta do banco, e o desenho mostra os dados:
+
+- quanto mais vasos em `estoque`, mais folhas e maior a planta;
+- com estoque zero, a planta murcha e ganha uma plaquinha de "esgotada";
+- a `luminosidade` define em qual faixa de luz a planta fica: sol pleno, meia-sombra ou sombra;
+- passar o mouse faz as folhas tremerem, com um farfalhar leve se o som estiver ligado;
+- plantas `petFriendly` têm um gato dormindo ao lado do vaso;
+- uma venda derruba folhas, e uma venda recusada (400) faz a planta balançar;
+- o jardim segue os filtros da listagem, e clicar numa planta leva até o cartão dela.
+
+O botão **Sons da floresta** liga um som ambiente (vento, pássaros e um acorde suave) gerado na hora com a Web Audio API, sem arquivos de áudio. O som começa desligado, porque o navegador só permite tocar depois de um clique. Quem ativou "reduzir movimento" no sistema vê o jardim parado.
 
 ---
 
