@@ -360,6 +360,41 @@
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; }
     }
+      :root {
+      --papel: #eef3e5;
+      --papel-escuro: #dfe9d2;
+      --cartao: #fbfdf7;
+      --linha: #d0dcc2;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 12% 0%, rgba(143, 176, 110, 0.2), transparent 45%),
+        radial-gradient(circle at 100% 100%, rgba(79, 122, 74, 0.16), transparent 40%),
+        var(--papel);
+      background-attachment: fixed;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      width: 300px;
+      height: 300px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -20 360 360'%3E%3Cg transform='rotate(105)'%3E%3Cpath d='M0 0 C 35.0 -57.5 31.5 -184.0 0 -230 C -31.5 -184.0 -35.0 -57.5 0 0Z' fill='%234f7a4a'/%3E%3Cpath d='M0 -4V-207' stroke='%23e3eed4' stroke-width='2' opacity='.5'/%3E%3C/g%3E%3Cg transform='rotate(125)'%3E%3Cpath d='M0 0 C 40.0 -65.0 36.0 -208.0 0 -260 C -36.0 -208.0 -40.0 -65.0 0 0Z' fill='%235d8a52'/%3E%3Cpath d='M0 -4V-234' stroke='%23e3eed4' stroke-width='2' opacity='.5'/%3E%3C/g%3E%3Cg transform='rotate(145)'%3E%3Cpath d='M0 0 C 37.0 -60.0 33.300000000000004 -192.0 0 -240 C -33.300000000000004 -192.0 -37.0 -60.0 0 0Z' fill='%233f6b45'/%3E%3Cpath d='M0 -4V-216' stroke='%23e3eed4' stroke-width='2' opacity='.5'/%3E%3C/g%3E%3Cg transform='rotate(165)'%3E%3Cpath d='M0 0 C 32.0 -50.0 28.8 -160.0 0 -200 C -28.8 -160.0 -32.0 -50.0 0 0Z' fill='%236b8f4e'/%3E%3Cpath d='M0 -4V-180' stroke='%23e3eed4' stroke-width='2' opacity='.5'/%3E%3C/g%3E%3Cg transform='rotate(115)'%3E%3Cpath d='M0 0 C 26.0 -42.5 23.400000000000002 -136.0 0 -170 C -23.400000000000002 -136.0 -26.0 -42.5 0 0Z' fill='%23557d5f'/%3E%3Cpath d='M0 -4V-153' stroke='%23e3eed4' stroke-width='2' opacity='.5'/%3E%3C/g%3E%3Cg transform='rotate(155)'%3E%3Cpath d='M0 0 C 23.0 -37.5 20.7 -120.0 0 -150 C -20.7 -120.0 -23.0 -37.5 0 0Z' fill='%237a9a5c'/%3E%3Cpath d='M0 -4V-135' stroke='%23e3eed4' stroke-width='2' opacity='.5'/%3E%3C/g%3E%3Cg transform='rotate(135)'%3E%3Cpath d='M0 0 C 44.0 -75.0 39.6 -240.0 0 -300 C -39.6 -240.0 -44.0 -75.0 0 0Z' fill='%234a7348'/%3E%3Cpath d='M0 -4V-270' stroke='%23e3eed4' stroke-width='2' opacity='.5'/%3E%3C/g%3E%3C/svg%3E") no-repeat center / contain;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before { top: -40px; left: -40px; }
+    body::after { right: -40px; bottom: -40px; transform: rotate(180deg); }
+
+    header.topo, .container { position: relative; z-index: 1; }
+
+    @media (max-width: 600px) {
+      body::before, body::after { width: 160px; height: 160px; }
+    }
   </style>
 </head>
 <body>
@@ -388,6 +423,7 @@
   </header>
 
   <div class="container">
+    <section id="jardim" class="jardim" aria-label="Jardim do estoque"></section>    
     <div class="barra" role="search">
       <div class="campo-busca">
         <svg aria-hidden="true"><use href="#i-busca"/></svg>
@@ -460,6 +496,7 @@
   </dialog>
 
   <div class="toasts" id="toasts" aria-live="assertive"></div>
+  <script src="jardim.js"></script>
 
   <script>
     const LUZ = {
@@ -573,6 +610,7 @@
     }
 
     function renderizar() {
+      window.Jardim?.atualizar(plantas);
       if (plantas.length === 0) {
         grade.innerHTML = '<div class="estado">Nenhuma planta encontrada com esses filtros.<small>Tente afrouxar a busca ou cadastre uma nova.</small></div>';
         return;
@@ -681,9 +719,11 @@
         const novoCartao = novo.firstElementChild;
         cartao.replaceWith(novoCartao);
         novoCartao.classList.add("pulsar");
+        window.Jardim?.vendeu(atualizada, quantidade);
         toast(`Venda registrada: ${quantidade} × ${atualizada.nome}.`);
         carregarTotais();
       } catch (e) {
+        window.Jardim?.recusou(id);
         toast(e.message, "erro");
       }
     });
